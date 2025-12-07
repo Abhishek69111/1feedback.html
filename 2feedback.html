@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Service Feedback</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #e5e7eb;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 10px 8px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.2);
+      padding: 14px 14px 18px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, #dbeafe 0, transparent 55%),
+                  radial-gradient(circle at 100% 100%, #e0f2fe 0, transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-glow {
+      animation: cardGlow 0.4s ease-out;
+    }
+
+    @keyframes cardGlow {
+      0%   { box-shadow: 0 0 0 rgba(37, 99, 235, 0); }
+      50%  { box-shadow: 0 0 20px rgba(37, 99, 235, 0.5); }
+      100% { box-shadow: 0 10px 28px rgba(15, 23, 42, 0.2); }
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .logo-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1d4ed8, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.55);
+    }
+
+    .header-text-main {
+      flex: 1;
+    }
+
+    .header-title-top {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #6b7280;
+      margin-bottom: 2px;
+    }
+
+    h1 {
+      font-size: 1.05rem;
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .sub {
+      font-size: 0.82rem;
+      color: #4b5563;
+      margin: 6px 0 0;
+    }
+
+    .employee-name {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .stars-section {
+      margin-top: 8px;
+      padding: 10px 8px 4px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .stars-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 6px 0;
+    }
+
+    .star {
+      font-size: 30px;
+      line-height: 30px;
+      cursor: pointer;
+      user-select: none;
+      color: #d4d4d8;
+      transition: transform 0.1s ease, color 0.1s ease, text-shadow 0.1s ease;
+    }
+
+    .star.active {
+      color: #facc15;
+      text-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+    }
+
+    .star-bounce {
+      animation: starBounce 0.35s ease-out;
+    }
+
+    @keyframes starBounce {
+      0%   { transform: scale(0.6); }
+      40%  { transform: scale(1.25) translateY(-3px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    .rating-text {
+      text-align: center;
+      font-size: 0.86rem;
+      color: #374151;
+      min-height: 22px;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .wow {
+      display: inline-block;
+      color: #16a34a;
+      font-weight: 700;
+      animation: pop 0.25s ease-out, floaty 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.6); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-3px); }
+    }
+
+    .tip-section {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .tip-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tip-pill {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .tip-note {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .fixed-amounts-title {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .fixed-amounts {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .amount-btn {
+      flex: 1;
+      min-width: 150px;
+      border-radius: 12px;
+      border: none;
+      padding: 10px 10px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 5px 14px rgba(37, 99, 235, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .amount-btn.secondary {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      box-shadow: 0 5px 14px rgba(13, 148, 136, 0.45);
+    }
+
+    .amount-main {
+      font-size: 1.02rem;
+    }
+
+    .amount-sub {
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.95;
+    }
+
+    .footer-text {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .celebration-container {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .burst {
+      position: absolute;
+      font-size: 1.3rem;
+      animation: burstUp 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes burstUp {
+      0%   { transform: translateY(8px) scale(0.5); opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-70px) scale(1); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card" id="card">
+      <div class="celebration-container" id="celebrationContainer"></div>
+      <div class="card-inner">
+        <header>
+          <div class="logo-circle">SB</div>
+          <div class="header-text-main">
+            <div class="header-title-top">Service Feedback</div>
+            <h1>How was your experience?</h1>
+            <p class="sub">
+              Please rate the service provided by
+              <span class="employee-name" id="employeeName">Employee Name</span>.
+            </p>
+          </div>
+        </header>
+
+        <section class="stars-section">
+          <div class="stars-label">Tap to rate your experience</div>
+          <div class="stars">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+          </div>
+          <div class="rating-text" id="ratingText"></div>
+        </section>
+
+        <!-- ONLY 500 & 1000 AMOUNTS -->
+        <div class="tip-section" id="tipSection">
+          <div class="tip-title">
+            Support the employee
+            <span class="tip-pill">UPI Payment</span>
+          </div>
+          <div class="tip-note">
+            Select a fixed appreciation amount to proceed with payment.
+          </div>
+
+          <div class="fixed-amounts-title">Select amount</div>
+
+          <div class="fixed-amounts">
+            <button class="amount-btn" data-fixed-amt="500">
+              <span class="amount-main">₹500</span>
+              <span class="amount-sub">Standard appreciation</span>
+            </button>
+            <button class="amount-btn secondary" data-fixed-amt="1000">
+              <span class="amount-main">₹1000</span>
+              <span class="amount-sub">High appreciation</span>
+            </button>
+          </div>
+
+          <div class="footer-text">
+            This will open your UPI app (PhonePe / GPay / Paytm etc.) for payment.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Your actual UPI ID
+    const UPI_ID = "9110253492@ibl";
+    const DEFAULT_EMPLOYEE_NAME = "Employee";
+
+    // Get employee name from URL: ?emp=Madhu
+    const params = new URLSearchParams(window.location.search);
+    const employeeNameFromUrl = params.get("emp");
+    const employeeName = employeeNameFromUrl || DEFAULT_EMPLOYEE_NAME;
+    document.getElementById("employeeName").textContent = employeeName;
+
+    const stars = document.querySelectorAll(".star");
+    const ratingText = document.getElementById("ratingText");
+    const tipSection = document.getElementById("tipSection");
+    const fixedAmountButtons = document.querySelectorAll(".amount-btn");
+    const celebrationContainer = document.getElementById("celebrationContainer");
+    const card = document.getElementById("card");
+
+    let selectedRating = 0;
+
+    const ratingMessages = {
+      1: "We are sorry for the inconvenience. Your feedback will help us improve.",
+      2: "Thank you. We will definitely work on improving the service.",
+      3: "Thank you for your feedback.",
+      4: "Glad to know you had a good experience.",
+      5: "<span class='wow'>Thank you for the excellent 5★ rating!</span>"
+    };
+
+    // Handle rating tap + animations
+    stars.forEach(function (star) {
+      star.addEventListener("click", function () {
+        const value = parseInt(star.getAttribute("data-value"), 10);
+        selectedRating = value;
+        updateStars(value);
+        showRatingMessage(value);
+        showTipSection();
+        animateStar(star);
+        animateCard();
+
+        if (value === 5) {
+          triggerCelebration();
+        }
+      });
+    });
+
+    function updateStars(value) {
+      stars.forEach(function (s) {
+        const starValue = parseInt(s.getAttribute("data-value"), 10);
+        if (starValue <= value) {
+          s.classList.add("active");
+        } else {
+          s.classList.remove("active");
+        }
+      });
+    }
+
+    function showRatingMessage(value) {
+      ratingText.innerHTML = ratingMessages[value] || "";
+    }
+
+    function showTipSection() {
+      tipSection.style.display = "block";
+    }
+
+    function animateStar(star) {
+      star.classList.remove("star-bounce");
+      void star.offsetWidth; // reset animation
+      star.classList.add("star-bounce");
+    }
+
+    function animateCard() {
+      card.classList.remove("card-glow");
+      void card.offsetWidth;
+      card.classList.add("card-glow");
+    }
+
+    // ONLY 500 & 1000 → Direct UPI
+    fixedAmountButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const amt = parseFloat(btn.getAttribute("data-fixed-amt"));
+        if (!amt || amt <= 0) return;
+
+        startUPIPayment(amt, "Appreciation for " + employeeName + " (" + (selectedRating || "-") + "★)");
+      });
+    });
+
+    function startUPIPayment(amount, noteText) {
+      const pa = encodeURIComponent(UPI_ID);
+      const pn = encodeURIComponent(employeeName);
+      const am = amount.toFixed(2);
+      const cu = "INR";
+      const tn = encodeURIComponent(noteText || ("Appreciation for " + employeeName));
+
+      const upiUrl = "upi://pay?pa=" + pa + "&pn=" + pn + "&am=" + am + "&cu=" + cu + "&tn=" + tn;
+
+      // Directly opens PhonePe / GPay / UPI app on mobile
+      window.location.href = upiUrl;
+    }
+
+    // Extra celebration on 5★
+    function triggerCelebration() {
+      const symbols = ["✨", "⭐", "🌟", "✳️", "💠"];
+      const count = 18;
+
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement("div");
+        el.className = "burst";
+        el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        const randomLeft = 10 + Math.random() * 80;
+        el.style.left = randomLeft + "%";
+        el.style.bottom = "0";
+        celebrationContainer.appendChild(el);
+        setTimeout(function () {
+          el.remove();
+        }, 1100);
+      }
+    }
+  </script>
+</body>
+</html>
